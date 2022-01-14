@@ -33,3 +33,5 @@ beans.xsd
 ruleset.xml
 *.log
 base.properties
+
+!bin/custom/concerttours/src/com/hybris/training/data
