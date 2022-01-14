@@ -15,8 +15,7 @@ hybris/sampleconfigurations/
 # filter only custom extension
 bin/*
 !bin/custom/
- 
-config/
+
 .idea/
 idea-module-files/
 .directory
