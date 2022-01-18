@@ -16,14 +16,17 @@ public class ConcerttoursCustomSetup
 {
     private static final Logger LOG = LoggerFactory.getLogger(ConcerttoursCustomSetup.class);
     private ImportService importService;
+
     public ImportService getImportService()
     {
         return importService;
     }
+
     public void setImportService(final ImportService importService)
     {
         this.importService = importService;
     }
+
     @SystemSetup(type = SystemSetup.Type.ESSENTIAL)
     public boolean putInMyEssentialData()
     {
@@ -31,25 +34,35 @@ public class ConcerttoursCustomSetup
         LOG.info("Custom essential data loading for the Concerttours extension completed.");
         return true;
     }
+
     @SystemSetup(type = SystemSetup.Type.PROJECT)
     public boolean addMyProjectData()
     {
         LOG.info("Starting custom project data loading for the Concerttours extension");
+
         impexImport("/impex/concerttours-bands.impex");
+        impexImport("/impex/concerttours-bands-en.impex");
+        impexImport("/impex/concerttours-bands-de.impex");
         impexImport("/impex/concerttours-yBandTour.impex");
+
         LOG.info("Custom project data loading for the Concerttours extension completed.");
         return true;
     }
+
     protected boolean impexImport(final String filename)
     {
         final String message = "Concerttours impexing [" + filename + "]...";
         try (final InputStream resourceAsStream = getClass().getResourceAsStream(filename))
         {
             LOG.info(message);
+
             final ImportConfig importConfig = new ImportConfig();
+
             importConfig.setScript(new StreamBasedImpExResource(resourceAsStream, "UTF-8"));
             importConfig.setLegacyMode(Boolean.FALSE);
+
             final ImportResult importResult = getImportService().importData(importConfig);
+
             if (importResult.isError())
             {
                 LOG.error(message + " FAILED");
@@ -63,4 +76,5 @@ public class ConcerttoursCustomSetup
         }
         return true;
     }
+
 }
