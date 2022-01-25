@@ -12,7 +12,7 @@
     <mvc:default-servlet-handler/>
     <mvc:annotation-driven/>
     <context:annotation-config/>
-    <context:component-scan base-package="com.hybris.training"/>
+    <context:component-scan base-package="de.hybris.training"/>
     <context:property-placeholder properties-ref="hybrisProperties"/>
 
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">

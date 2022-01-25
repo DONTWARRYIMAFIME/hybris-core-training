@@ -3,14 +3,8 @@
 	<path dir="${HYBRIS_BIN_DIR}" autoload="false"/>
 	<extension name="concerttours"/>
 	<extension name="platformbackoffice"/> 
-									 
-	<!-- ext-template -->
-	<extension name="yempty" />
-	<extension name="yhacext" />
-	
-	
-	<extension name='parentExtension' />
-	<extension name='childExtension' />
-	<extension name='serviceLayerExtension' />
+	<extension name="parentExtension"/> 
+	<extension name="childExtension"/> 
+	<extension name="serviceLayerExtension"/> 
   </extensions>
 </hybrisconfig>

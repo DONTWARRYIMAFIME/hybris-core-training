@@ -4,4 +4,4 @@ INSERT_UPDATE CronJob; code[unique = true]; job(code)      ; singleExecutable; s
 
 # Define the trigger that periodically invokes the cron job
 INSERT_UPDATE Trigger; cronjob(code)[unique = true]; cronExpression
-                     ; changeTokenCronJob          ; * */30 * * * ?
+                     ; changeTokenCronJob          ; 0 0/30 * * * ?
