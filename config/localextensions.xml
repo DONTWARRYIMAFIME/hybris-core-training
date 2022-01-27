@@ -4,5 +4,6 @@
 	<extension name='parentExtension' />
 	<extension name='childExtension' />
 	<extension name='concerttours' />
+	<extension name='serviceLayerExtension' />
   </extensions>
 </hybrisconfig>
