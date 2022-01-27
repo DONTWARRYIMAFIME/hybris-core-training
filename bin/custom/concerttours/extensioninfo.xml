@@ -22,7 +22,7 @@
 
       
         
-        <coremodule generated="true" manager="com.hybris.training.jalo.ConcerttoursManager" packageroot="com.hybris.training"/>
+        <coremodule generated="true" manager="de.hybris.training.jalo.ConcerttoursManager" packageroot="de.hybris.training"/>
                       
         
         <webmodule jspcompile="false" webroot="/concerttours"/>

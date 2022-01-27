@@ -1,0 +1,7 @@
+INSERT_UPDATE UserData; code[unique = true]; firstName; lastName
+                      ; A001               ; Ivan     ; Petrovich
+                      ; A006               ; Petr     ; Ivanovich
+                      ; A003               ; Artem    ; Sergeenko
+                      ; A004               ; Sergey   ; Artemenko
+                      ; A002               ; Chicken  ; Funny
+                      ; A005               ; Ken      ; Chik

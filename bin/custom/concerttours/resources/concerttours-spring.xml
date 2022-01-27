@@ -3,46 +3,98 @@
  Copyright (c) 2020 SAP SE or an SAP affiliate company. All rights reserved.
 -->
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:context="http://www.springframework.org/schema/context"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
            http://www.springframework.org/schema/context
-           http://www.springframework.org/schema/context/spring-context-3.1.xsd"
-    >
+           http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
     <context:component-scan base-package="concerttours"/>
 
-    <bean id="concerttoursSystemSetup" class="com.hybris.training.setup.ConcerttoursSystemSetup">
-        <!-- constructor arg injection example -->
-        <constructor-arg ref="concerttoursService"/>
-    </bean>
+    <!-- DAOs -->
+    <alias name = "defaultBandDAO" alias = "bandDAO" />
+    <bean id = "defaultBandDAO" class = "de.hybris.training.daos.impl.DefaultBandDAO" />
 
-    <bean id="concerttoursService" class="com.hybris.training.service.impl.DefaultConcerttoursService">
+    <alias name = "defaultNewsDAO" alias = "newsDAO" />
+    <bean id = "defaultNewsDAO" class = "de.hybris.training.daos.impl.DefaultNewsDAO" />
+
+    <alias name = "defaultTokenizerDAO" alias = "tokenizerDAO" />
+    <bean id = "defaultTokenizerDAO" class = "de.hybris.training.daos.impl.DefaultTokenizerDAO" />
+
+    <!-- Services -->
+    <bean id="concerttoursService" class="de.hybris.training.service.impl.DefaultConcerttoursService">
         <!-- setter injection example -->
         <property name="modelService" ref="modelService"/>
         <property name="mediaService" ref="mediaService"/>
         <property name="flexibleSearchService" ref="flexibleSearchService"/>
     </bean>
-	
-	<bean id="concerttoursCustomSetup" class="com.hybris.training.setup.ConcerttoursCustomSetup" >
-		<property name="importService" ref="importService"/>
-	</bean>
 
-    <alias name = "defaultBandDAO" alias = "bandDAO" />
-    <bean id = "defaultBandDAO" class = "com.hybris.training.daos.impl.DefaultBandDAO" />
+    <alias name = "defaultBandService" alias = "bandService" />
+    <bean id = "defaultBandService" class = "de.hybris.training.service.impl.DefaultBandService" >
+        <property name = "bandDAO" ref = "bandDAO" />
+    </bean>
 
-	<alias name = "defaultBandService" alias = "bandService" />
-	<bean id = "defaultBandService" class = "com.hybris.training.service.impl.DefaultBandService" >
-		<property name = "bandDAO" ref = "bandDAO" />
-	</bean>
+    <alias name="defaultNewsService" alias="newsService" />
+    <bean id="defaultNewsService" class="de.hybris.training.service.impl.DefaultNewsService">
+        <property name="newsDAO" ref="newsDAO" />
+    </bean>
 
+    <alias name="defaultTokenizerService" alias="tokenizerService" />
+    <bean id="defaultTokenizerService" class="de.hybris.training.service.impl.DefaultTokenizerService">
+        <property name="tokenizerDAO" ref="tokenizerDAO" />
+    </bean>
+
+    <!-- Setup -->
+    <bean id="concerttoursSystemSetup" class="de.hybris.training.setup.ConcerttoursSystemSetup">
+        <!-- constructor arg injection example -->
+        <constructor-arg ref="concerttoursService"/>
+    </bean>
+
+    <bean id="concerttoursCustomSetup" class="de.hybris.training.setup.ConcerttoursCustomSetup" >
+        <property name="importService" ref="importService"/>
+    </bean>
+
+    <!-- Jobs -->
+    <bean id="sendNewsJob" class="de.hybris.training.jobs.SendNewsJob" parent="abstractJobPerformable">
+        <property name="newsService" ref="newsService" />
+        <property name="configurationService" ref="configurationService" />
+    </bean>
+
+    <bean id="changeTokenJob" class="de.hybris.training.jobs.ChangeTokenJob" parent="abstractJobPerformable">
+        <property name="tokenizerService" ref="tokenizerService" />
+    </bean>
+
+    <!-- Handlers -->
+    <bean id="concertDaysUntilAttributeHandler" class="de.hybris.training.attributehandlers.ConcertDaysUntilAttributeHandler"/>
+    <bean id="fullNameAttributeHandler" class="de.hybris.training.attributehandlers.FullNameAttributeHandler"/>
+
+    <!-- Events -->
+    <bean id="concerttourEventListener" class="de.hybris.training.events.NewBandEventListener" parent="abstractEventListener">
+        <property name="modelService" ref="modelService" />
+    </bean>
+
+    <bean id="bandAlbumSalesEventListener" class="de.hybris.training.events.BandAlbumSalesEventListener" parent="abstractEventListener" >
+        <property name="modelService" ref="modelService" />
+    </bean>
+
+    <!-- Interceptors -->
+    <bean id="bandAlbumSalesInterceptor" class="de.hybris.training.interceptors.BandAlbumSalesInterceptor" />
+    <bean id="bandInterceptorMapping" class="de.hybris.platform.servicelayer.interceptor.impl.InterceptorMapping">
+        <property name="interceptor" ref="bandAlbumSalesInterceptor" />
+        <property name="typeCode" value="Band" />
+    </bean>
+
+    <!-- Facades -->
     <alias name = "defaultBandFacade" alias = "bandFacade" />
-    <bean id = "defaultBandFacade" class ="com.hybris.training.facades.impl.DefaultBandFacade" >
+    <bean id = "defaultBandFacade" class ="de.hybris.training.facades.impl.DefaultBandFacade" >
         <property name = "bandService" ref = "bandService" />
+        <property name="mediaService" ref="mediaService"/>
+        <property name="configurationService" ref="configurationService" />
     </bean>
 
     <alias name = "defaultTourFacade" alias = "tourFacade" />
-    <bean id = "defaultTourFacade" class ="com.hybris.training.facades.impl.DefaultTourFacade" >
+    <bean id = "defaultTourFacade" class ="de.hybris.training.facades.impl.DefaultTourFacade" >
         <property name = "productService" ref = "productService" />
     </bean>
 </beans>

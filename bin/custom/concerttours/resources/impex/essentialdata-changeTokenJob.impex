@@ -1,0 +1,7 @@
+# Define the cron job and the job that it wraps
+INSERT_UPDATE CronJob; code[unique = true]; job(code)      ; singleExecutable; sessionLanguage(isocode)
+                     ; changeTokenCronJob ; changeTokenJob ; false           ; de
+
+# Define the trigger that periodically invokes the cron job
+INSERT_UPDATE Trigger; cronjob(code)[unique = true]; cronExpression
+                     ; changeTokenCronJob          ; 0 0/30 * * * ?

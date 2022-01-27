@@ -1,0 +1,4 @@
+INSERT_UPDATE Tokenizer; token[unique = true]
+                       ; default-token-1
+                       ; default-token-2
+                       ; default-token-3
