@@ -21,6 +21,7 @@ public class DefaultBandFacade implements BandFacade
 {
     public  static final String BAND_LIST_FORMAT = "band.list.format.name";
     private static final String BAND_DETAIL_FORMAT = "band.detail.format.name";
+
     private BandService bandService;
     private MediaService mediaService;
     private ConfigurationService configService;
@@ -33,7 +34,9 @@ public class DefaultBandFacade implements BandFacade
         if (bandModels!=null && !bandModels.isEmpty()) //6.2
         {
             final String mediaFormatName = configService.getConfiguration().getString(BAND_LIST_FORMAT);
+
             System.out.println("mediaFormatName:"+mediaFormatName);
+
             final MediaFormatModel format = mediaService.getFormat(mediaFormatName);
             for (final BandModel sm : bandModels)
             {
@@ -56,11 +59,13 @@ public class DefaultBandFacade implements BandFacade
         {
             throw new IllegalArgumentException("Band name cannot be null");
         }
+
         final BandModel band = bandService.getBandForCode(name);
         if (band == null)
         {
             return null;
         }
+
         // Create a list of genres
         final List<String> genres = new ArrayList<>();
         if (band.getTypes() != null)
@@ -70,6 +75,7 @@ public class DefaultBandFacade implements BandFacade
                 genres.add(musicType.getCode());
             }
         }
+
         // Create a list of TourSummaryData
         final List<TourSummaryData> tourHistory = new ArrayList<>();
         if (band.getTours() != null)
@@ -88,6 +94,7 @@ public class DefaultBandFacade implements BandFacade
         final String mediaFormatName = configService.getConfiguration().getString(BAND_DETAIL_FORMAT);
         final MediaFormatModel format = mediaService.getFormat(mediaFormatName);
         final BandData bandData = new BandData();
+
         bandData.setId(band.getCode());
         bandData.setName(band.getName());
         bandData.setAlbumsSold(band.getAlbumSales());
@@ -95,6 +102,7 @@ public class DefaultBandFacade implements BandFacade
         bandData.setDescription(band.getHistory(Locale.ENGLISH));
         bandData.setGenres(genres);
         bandData.setTours(tourHistory);
+
         return bandData;
     }
 
@@ -105,6 +113,7 @@ public class DefaultBandFacade implements BandFacade
         {
             return mediaService.getMediaByFormat(container, format).getDownloadURL();
         }
+
         return null;
     }
 

@@ -93,6 +93,7 @@ public class DefaultBandServiceIntegrationTest extends ServicelayerTest
     public void testBandServiceTours() throws Exception
     {
         createCoreData();
+        importCsv("/impex/essentialdata-mediaformats.impex", "utf-8");
         importCsv("/impex/concerttours-bands.impex", "utf-8");
         importCsv("/impex/concerttours-yBandTour.impex", "utf-8");
         final BandModel band = bandService.getBandForCode("A001");

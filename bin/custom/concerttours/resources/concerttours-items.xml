@@ -6,7 +6,8 @@
 <items 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 			xsi:noNamespaceSchemaLocation="items.xsd">
 	<collectiontypes>
-		<collectiontype code="ConcertCollection" elementtype="Concert" autocreate="true" generate="true"/>
+		<collectiontype code="ConcertCollection" elementtype="Concert" autocreate="true"/>
+		<collectiontype code="LongCollection" elementtype="java.lang.Long" autocreate="true"/>
 	</collectiontypes>
 
 	<enumtypes>
@@ -23,12 +24,16 @@
 		<maptype code="BandMap"
 				 argumenttype="java.lang.String"
 				 returntype="Band"
-				 autocreate="true"
-				 generate="false"/>
+				 autocreate="true"/>
+
+		<maptype code="PhoneDictionary"
+				 argumenttype="java.lang.String"
+				 returntype="java.lang.Long"
+				 autocreate="true"/>
 	</maptypes>
 
 	<relations>
-		<relation code="Product2RockBand" autocreate="true" generate="false" localized="false">
+		<relation code="Product2RockBand" autocreate="true" localized="false">
 			<sourceElement qualifier="tours" type="Product" collectiontype="set" cardinality="many" ordered="false">
 				<modifiers read="true" write="true" search="true" optional="true" />
 			</sourceElement>
@@ -36,12 +41,20 @@
 				<modifiers read="true" write="true" search="true" optional="true" />
 			</targetElement>
 		</relation>
-		<relation code="Band2MusicType" autocreate="true" generate="false" localized="false">
+		<relation code="Band2MusicType" autocreate="true" localized="false">
 			<deployment table="Band2MusicType" typecode="30269" />
 			<sourceElement qualifier="bands" type="Band" collectiontype="set" cardinality="many" ordered="false">
 				<modifiers read="true" write="true" search="true" optional="true" />
 			</sourceElement>
 			<targetElement qualifier="types" type="MusicType" cardinality="many">
+				<modifiers read="true" write="true" search="true" optional="true" />
+			</targetElement>
+		</relation>
+		<relation code="UItem2SItem" autocreate="true" localized="false">
+			<sourceElement qualifier="universalItem" type="UniversalItem" cardinality="one" ordered="false">
+				<modifiers read="true" write="true" search="true" optional="true" />
+			</sourceElement>
+			<targetElement qualifier="subItems" type="SubItem" collectiontype="set" cardinality="many">
 				<modifiers read="true" write="true" search="true" optional="true" />
 			</targetElement>
 		</relation>
@@ -190,5 +203,39 @@
 				</attribute>
 			</attributes>
 		</itemtype>
+
+		<itemtype code="SubItem" autocreate="true" generate="true">
+			<deployment table="SubItem" typecode="30274" />
+			<attributes>
+				<attribute qualifier="code" type="java.lang.String">
+					<persistence type="property" />
+				</attribute>
+				<attribute qualifier="name" type="java.lang.String">
+					<persistence type="property" />
+				</attribute>
+			</attributes>
+		</itemtype>
+
+		<itemtype code="UniversalItem" autocreate="true" generate="true">
+			<deployment table="UniversalItem" typecode="30275" />
+			<attributes>
+				<attribute qualifier="code" type="java.lang.String">
+					<persistence type="property" />
+				</attribute>
+				<attribute qualifier="item" type="Concert">
+					<persistence type="property" />
+				</attribute>
+				<attribute qualifier="enum" type="ConcertType">
+					<persistence type="property" />
+				</attribute>
+				<attribute qualifier="collection" type="LongCollection">
+					<persistence type="property" />
+				</attribute>
+				<attribute qualifier="map" type="PhoneDictionary">
+					<persistence type="property" />
+				</attribute>
+			</attributes>
+		</itemtype>
+
 	</itemtypes>
 </items>

@@ -14,6 +14,7 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @IntegrationTest
@@ -25,12 +26,15 @@ public class DefaultBandFacadeIntegrationWithPropertiesTest extends Servicelayer
     @Before
     public void setUp() throws Exception
     {
-        try {
+        try
+        {
             Thread.sleep(TimeUnit.SECONDS.toMillis(1));
             new JdbcTemplate(Registry.getCurrentTenant().getDataSource()).execute("CHECKPOINT");
             Thread.sleep(TimeUnit.SECONDS.toMillis(1));
         }
-        catch (InterruptedException exc) {}
+        catch (InterruptedException exc)
+        {
+        }
     }
 
     @Test
@@ -39,11 +43,11 @@ public class DefaultBandFacadeIntegrationWithPropertiesTest extends Servicelayer
         createCoreData();
         importCsv("/impex/essentialdata-mediaformats.impex", "UTF-8");
         importCsv("/impex/concerttours-bands.impex", "UTF-8");
-        importCsv("/impex/withlocalization/concerttours-yBandTour.impex", "UTF-8");
+        importCsv("/impex/concerttours-yBandTour.impex", "UTF-8");
 
         List<BandData> bands = bandFacade.getBands();
         assertTrue(bands.size() > 0);
-        assertTrue( DefaultBandFacade.BAND_LIST_FORMAT.equals("band.list.format.name"));
+        assertEquals(DefaultBandFacade.BAND_LIST_FORMAT, "band.list.format.name");
     }
 
     @After
