@@ -2,19 +2,25 @@ package de.hybris.training.facades.impl;
 
 import de.hybris.bootstrap.annotations.IntegrationTest;
 import de.hybris.platform.core.Registry;
+import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.servicelayer.ServicelayerTransactionalTest;
 import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
 import de.hybris.platform.servicelayer.model.ModelService;
+import de.hybris.platform.variants.model.VariantProductModel;
 import de.hybris.training.data.BandData;
 import de.hybris.training.facades.BandFacade;
 import de.hybris.training.model.BandModel;
+import de.hybris.training.service.BandService;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.annotation.Resource;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static de.hybris.platform.testframework.Assert.assertEquals;
@@ -29,26 +35,44 @@ public class DefaultBandFacadeIntegrationTest extends ServicelayerTransactionalT
     @Resource
     private BandFacade bandFacade;
     @Resource
+    private BandService bandService;
+    @Resource
     private ModelService modelService;
-    /** Test band */
+    /**
+     * Test band
+     */
     private BandModel bandModel;
-    /** Name of test band. */
+    /**
+     * Name of test band.
+     */
     private static final String BAND_CODE = "101-JAZ";
-    /** Name of test band. */
+    /**
+     * Name of test band.
+     */
     private static final String BAND_NAME = "Tight Notes";
-    /** History of test band. */
+    /**
+     * History of test band.
+     */
     private static final String BAND_HISTORY = "New contemporary, 7-piece Jaz unit from London, formed in 2015";
-    /** Albums sold by test band. */
-    private static final Long ALBUMS_SOLD = Long.valueOf(10L);
+    /**
+     * Albums sold by test band.
+     */
+    private static final Long ALBUMS_SOLD = 10L;
 
     @Before
-    public void setUp()
+    public void setUp() throws Exception
     {
-        try {
+        try
+        {
             Thread.sleep(TimeUnit.SECONDS.toMillis(1));
             new JdbcTemplate(Registry.getCurrentTenant().getDataSource()).execute("CHECKPOINT");
             Thread.sleep(TimeUnit.SECONDS.toMillis(1));
-        } catch (InterruptedException exc) {}
+        }
+        catch (InterruptedException exc)
+        {
+        }
+        importCsv("/impex/essentialdata-mediaformats.impex", "UTF-8");
+
         // This instance of a BandModel will be used by the tests
         bandModel = modelService.create(BandModel.class);
         bandModel.setCode(BAND_CODE);
@@ -102,6 +126,24 @@ public class DefaultBandFacadeIntegrationTest extends ServicelayerTransactionalT
         assertEquals(BAND_NAME, persistedBandData.getName());
         assertEquals(ALBUMS_SOLD, persistedBandData.getAlbumsSold());
         assertEquals(BAND_HISTORY, persistedBandData.getDescription());
+    }
+
+    @Test
+    public void testBandServiceTours() throws Exception
+    {
+        createCoreData();
+        importCsv("/impex/essentialdata-mediaformats.impex", "UTF-8");
+        importCsv("/impex/concerttours-bands.impex", "utf-8");
+        importCsv("/impex/concerttours-yBandTour.impex", "utf-8");
+        final BandModel band = bandService.getBandForCode("A001");
+        assertNotNull("No band found", band);
+        final Set<ProductModel> tours = band.getTours();
+        assertNotNull("No tour found", tours);
+        Assert.assertEquals("not found one tour", 1, tours.size());
+        final Object[] objects = new Object[5];
+        final Collection<VariantProductModel> concerts = ((ProductModel) tours.toArray(objects)[0]).getVariants();
+        assertNotNull("No tour found", tours);
+        Assert.assertEquals("not found one tour", 6, concerts.size());
     }
 
     @After
