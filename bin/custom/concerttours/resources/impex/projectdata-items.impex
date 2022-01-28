@@ -1,0 +1,10 @@
+INSERT_UPDATE SubItem; code[unique = true, allownull = false]; name;
+                     ; SI001                                 ; SubItem1
+                     ; SI002                                 ; SubItem2
+                     ; SI003                                 ; SubItem3
+                     ; SI004                                 ; SubItem4
+                     ; SI005                                 ; SubItem5
+
+
+INSERT_UPDATE UniversalItem; code[unique = true, allownull = false]; item(code); enum(code); subItems(code)[mode = append]; collection[mode = append]; map(key, value)[map-delimiter = |];
+                           ; UI001                                 ; 20170101  ; openair   ; SI001,SI004,SI005            ; 1337,322,228             ; ilya->322,arseniy->228,vova->1337

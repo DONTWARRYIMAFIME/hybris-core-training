@@ -24,11 +24,13 @@ public class DefaultTourFacade implements TourFacade
         {
             throw new IllegalArgumentException("Tour id cannot be null");
         }
+
         final ProductModel product = productService.getProductForCode(tourId);
         if (product == null)
         {
             return null;
         }
+
         // Create a list of ConcertSummaryData from the matches
         final List<ConcertSummaryData> concerts = new ArrayList<>();
         if (product.getVariants() != null)
@@ -47,15 +49,17 @@ public class DefaultTourFacade implements TourFacade
                 }
             }
         }
+
         // Now we can create the TourData transfer object
         final TourData tourData = new TourData();
+
         tourData.setId(product.getCode());
         tourData.setTourName(product.getName());
         tourData.setDescription(product.getDescription());
         tourData.setConcerts(concerts);
+
         return tourData;
     }
-
     @Required
     public void setProductService(final ProductService productService)
     {

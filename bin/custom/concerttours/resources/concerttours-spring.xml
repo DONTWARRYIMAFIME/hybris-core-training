@@ -89,8 +89,6 @@
     <alias name = "defaultBandFacade" alias = "bandFacade" />
     <bean id = "defaultBandFacade" class ="de.hybris.training.facades.impl.DefaultBandFacade" >
         <property name = "bandService" ref = "bandService" />
-        <property name="mediaService" ref="mediaService"/>
-        <property name="configurationService" ref="configurationService" />
     </bean>
 
     <alias name = "defaultTourFacade" alias = "tourFacade" />
