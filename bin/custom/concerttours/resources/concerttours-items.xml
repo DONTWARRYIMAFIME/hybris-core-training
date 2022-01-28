@@ -58,6 +58,14 @@
 				<modifiers read="true" write="true" search="true" optional="true" />
 			</targetElement>
 		</relation>
+		<relation code="Producer2Concert" autocreate="true" localized="false">
+			<sourceElement qualifier="producer" type="Producer" cardinality="one" ordered="false">
+				<modifiers read="true" write="true" search="true" optional="true" />
+			</sourceElement>
+			<targetElement qualifier="concerts" type="Concert" collectiontype="set" cardinality="many">
+				<modifiers read="true" write="true" search="true" optional="true" />
+			</targetElement>
+		</relation>
 	</relations>
 
 	<itemtypes>
@@ -232,6 +240,18 @@
 					<persistence type="property" />
 				</attribute>
 				<attribute qualifier="map" type="PhoneDictionary">
+					<persistence type="property" />
+				</attribute>
+			</attributes>
+		</itemtype>
+
+		<itemtype code="Producer" autocreate="true" generate="true">
+			<deployment table="Producer" typecode="30276" />
+			<attributes>
+				<attribute qualifier="code" type="java.lang.String">
+					<persistence type="property" />
+				</attribute>
+				<attribute qualifier="name" type="java.lang.String">
 					<persistence type="property" />
 				</attribute>
 			</attributes>

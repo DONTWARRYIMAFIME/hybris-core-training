@@ -47,6 +47,7 @@ public class DefaultTourFacade implements TourFacade
                     summary.setVenue(concert.getVenue());
                     summary.setType(concert.getConcertType() == ConcertType.OPENAIR ? "Outdoors" : "Indoors");
                     summary.setCountDown(concert.getDaysUntil());
+                    summary.setProducer(concert.getProducer().getName());
                     concerts.add(summary);
                 }
             }

@@ -1,0 +1,10 @@
+INSERT_UPDATE Producer; code[unique = true, allownull = false]; name[allownull = false]; concerts(code)[mode = append];
+                      ; P001                                  ; Jon Hopkins            ; 20170101, 20170102           ;
+                      ; P002                                  ; Tyler, the Creator     ; 20170103                     ;
+                      ; P003                                  ; Floating Points        ; 20170104                     ;
+                      ; P004                                  ; James Blake            ;                              ;
+                      ; P005                                  ; Jack Antonoff          ;                              ;
+                      ; P006                                  ; Loraine James          ;                              ;
+                      ; P007                                  ; Fred Again             ; 20170105, 20170106           ;
+
+
