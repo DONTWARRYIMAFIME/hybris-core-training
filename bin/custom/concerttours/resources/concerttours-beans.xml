@@ -24,6 +24,7 @@
 		<property name = "venue" type = "String" />
 		<property name = "type" type = "String" />
 		<property name = "countDown" type="Long"/>
+		<property name = "producer" type="String"/>
 	</bean>
 	<bean class = "de.hybris.training.data.TourData" >
 		<description>Data object representing a tour</description>

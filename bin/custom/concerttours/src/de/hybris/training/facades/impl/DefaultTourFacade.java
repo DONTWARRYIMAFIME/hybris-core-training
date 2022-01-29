@@ -8,10 +8,12 @@ import de.hybris.training.data.TourData;
 import de.hybris.training.enums.ConcertType;
 import de.hybris.training.facades.TourFacade;
 import de.hybris.training.model.ConcertModel;
+import de.hybris.training.model.ProducerModel;
 import org.springframework.beans.factory.annotation.Required;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class DefaultTourFacade implements TourFacade
 {
@@ -47,6 +49,7 @@ public class DefaultTourFacade implements TourFacade
                     summary.setVenue(concert.getVenue());
                     summary.setType(concert.getConcertType() == ConcertType.OPENAIR ? "Outdoors" : "Indoors");
                     summary.setCountDown(concert.getDaysUntil());
+                    summary.setProducer(Optional.ofNullable(concert.getProducer()).map(ProducerModel::getName).orElse(null));
                     concerts.add(summary);
                 }
             }
