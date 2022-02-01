@@ -3,6 +3,8 @@
 # Macros / Replacement Parameter definitions
 $productCatalog = concertoursProductCatalog
 $catalogVersion = catalogversion(catalog(id[default=$productCatalog]), version[default='Online'])[unique=true, default=$productCatalog:Online]
+$supercategories = supercategories(code, $catalogVersion)
+$approved = approvalstatus(code)[default='approved']
 $medias = medias(code, $catalogVersion)
 $siteResource = jar:de.hybris.training.constants.ConcerttoursConstants&/concerttours/bandimages
 
@@ -10,10 +12,12 @@ $siteResource = jar:de.hybris.training.constants.ConcerttoursConstants&/concertt
 INSERT_UPDATE Catalog; id[unique = true]
                      ; $productCatalog
 
-# Product catalog version
+# Product cataog version
 INSERT_UPDATE CatalogVersion; catalog(id)[unique = true]; version[unique = true]; active; languages(isoCode); readPrincipals(uid)
                             ; $productCatalog           ; Online                ; true  ; en                ; employeegroup
+                            ; $productCatalog           ; Staged                ; false ; en                ; employeegroup
 
+# Media
 INSERT_UPDATE Media; mediaFormat(qualifier); code[unique = true]; @media[translator = de.hybris.platform.impex.jalo.media.MediaDataTranslator]; mime[default = 'image/jpeg']; $catalogVersion
                    ; bandList              ; rockSmall.jpg      ; $siteResource/rockSmall.jpg                                                 ;                             ;
                    ; bandDetail            ; rockBig.jpg        ; $siteResource/rockBig.jpg                                                   ;                             ;
@@ -26,7 +30,9 @@ INSERT_UPDATE Media; mediaFormat(qualifier); code[unique = true]; @media[transla
                    ; bandList              ; omphaSmall.jpg     ; $siteResource/omphaSmall.jpg                                                ;                             ;
                    ; bandDetail            ; omphaBig.jpg       ; $siteResource/omphaBig.jpg                                                  ;                             ;
                    ; bandList              ; orchestraSmall.jpg ; $siteResource/orchestraSmall.jpg                                            ;                             ;
-                   ; bandDetail            ; orchestraBig.jpg   ; $siteResource/orchestraBig.jpg                                              ;                             ;
+                   ; bandDetail            ; orchestraBig.jpg   ; $siteResource/orchestraBig.jpg                                              ;
+
+# Media Container
 INSERT_UPDATE MediaContainer; qualifier[unique = true]; $medias                             ; $catalogVersion
                             ; yRockImage              ; rockSmall.jpg,rockBig.jpg           ;
                             ; yBandImage              ; danceSmall.jpg,danceBig.jpg         ;
@@ -35,6 +41,7 @@ INSERT_UPDATE MediaContainer; qualifier[unique = true]; $medias                 
                             ; SirkenImage             ; omphaSmall.jpg,omphaBig.jpg         ;
                             ; TheChoirImage           ; orchestraSmall.jpg,orchestraBig.jpg ;
 
+# Insert Bands
 INSERT_UPDATE Band; code[unique = true]; name      ; albumSales; image(qualifier)
                   ; A001               ; yRock     ; 1000000   ; yRockImage
                   ; A006               ; yBand     ;           ; yBandImage
@@ -43,3 +50,16 @@ INSERT_UPDATE Band; code[unique = true]; name      ; albumSales; image(qualifier
                   ; A002               ; Sirken    ; 2000      ; SirkenImage
                   ; A005               ; The Choir ; 49000     ; TheChoirImage
                   ; A007               ; The Quiet ; 1200      ; ;
+
+# Insert Products
+INSERT_UPDATE Product; code[unique = true]; name                  ; band(code); hashtag[lang = en]; hashtag[lang = de]; $supercategories; manufacturerName; manufacturerAID; unit(code); ean; variantType(code); $catalogVersion; $approved
+                     ; 201701             ; The Grand Little Tour ; A001      ; GrandLittle       ; GrossWenig        ;                 ; x               ; y              ; pieces    ;    ; Concert
+
+# Insert Concerts
+INSERT_UPDATE Concert; code[unique = true]; name                  ; date[dateformat = dd.MM.yyyy]; venue                     ; concertType(code); baseProduct(code); $catalogVersion; $approved
+                     ; 20170101           ; Grand Tour - Munich   ; 03.02.2023                   ; "hybris Munich, Germany"  ; openair          ; 201701           ;
+                     ; 20170102           ; Grand Tour - London   ; 21.03.2023                   ; "hybris London, UK"       ; openair          ; 201701           ;
+                     ; 20170103           ; Grand Tour - Montreal ; 15.06.2023                   ; "hybris Montreal, Canada" ; indoor           ; 201701           ;
+                     ; 20170104           ; Grand Tour - Gliwice  ; 04.11.2023                   ; "hybris Gliwice, Poland"  ; indoor           ; 201701           ;
+                     ; 20170105           ; Grand Tour - Boulder  ; 07.01.2024                   ; "hybris Boulder, USA"     ; indoor           ; 201701           ;
+                     ; 20170106           ; Grand Tour - Boston   ;                              ; "hybris Boston, USA"      ;                  ; 201701           ;
