@@ -43,7 +43,6 @@ public class DefaultBandFacadeIntegrationWithPropertiesTest extends Servicelayer
         createCoreData();
         importCsv("/impex/essentialdata-mediaformats.impex", "UTF-8");
         importCsv("/impex/concerttours-bands.impex", "UTF-8");
-        importCsv("/impex/concerttours-yBandTour.impex", "UTF-8");
 
         List<BandData> bands = bandFacade.getBands();
         assertTrue(bands.size() > 0);

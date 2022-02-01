@@ -150,6 +150,22 @@
 
 		<itemtype generate="true" code="News" autocreate="true">
 			<deployment table="News" typecode="30271" />
+			<custom-properties>
+				<!-- marking the type as synchronizing capable here: -->
+				<property name="catalogItemType">
+					<value>java.lang.Boolean.TRUE</value>
+				</property>
+
+				<!-- define catalog version attribute here: -->
+				<property name="catalogVersionAttributeQualifier">
+					<value>"catalogVersion"</value>
+				</property>
+
+				<!-- define unique key attributes here; separate multiple attribute qualifiers by commas: -->
+				<property name="uniqueKeyAttributeQualifier">
+					<value>"keyword"</value>
+				</property>
+			</custom-properties>
 			<attributes>
 				<attribute qualifier="date" type="java.util.Date">
 					<description>date of news item</description>
@@ -162,6 +178,10 @@
 				<attribute qualifier="content" type="java.lang.String">
 					<description>fuller description of the news item</description>
 					<persistence type="property" />
+				</attribute>
+				<attribute qualifier="catalogVersion" type="CatalogVersion">
+					<modifiers read="true" write="false" search="true" initial="true" optional="false"/>
+					<persistence type="property"/>
 				</attribute>
 			</attributes>
 		</itemtype>

@@ -72,10 +72,12 @@
     <!-- Events -->
     <bean id="concerttourEventListener" class="de.hybris.training.events.NewBandEventListener" parent="abstractEventListener">
         <property name="modelService" ref="modelService" />
+        <property name="catalogVersionService" ref="catalogVersionService" />
     </bean>
 
     <bean id="bandAlbumSalesEventListener" class="de.hybris.training.events.BandAlbumSalesEventListener" parent="abstractEventListener" >
         <property name="modelService" ref="modelService" />
+        <property name="catalogVersionService" ref="catalogVersionService" />
     </bean>
 
     <!-- Interceptors -->
